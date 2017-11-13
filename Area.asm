@@ -1,0 +1,56 @@
+# Simple input/output in MIIPS assembly
+# From: http://labs.cs.upt.ro/labs/so2/html/resources/nachos-doc/mipsf.html
+
+	# Start .text segment (program code)
+	.text
+	
+	.globl	main
+main:
+	# Print string msg1
+	li	$v0,4		# print_string syscall code = 4
+	la	$a0, msg1	# load the address of msg
+	syscall
+
+	# Pega o valor da Altura e salva
+	li	$v0,5		# read_int syscall code = 5
+	syscall	
+	move	$t0,$v0		# syscall results returned in $v0
+
+	# Print string msg2
+	li	$v0,4		# print_string syscall code = 4
+	la	$a0, msg2	# load the address of msg2
+	syscall
+
+	# Pega o valor da Peso e salva
+	li	$v0,5		# read_int syscall code = 5
+	syscall	
+	move	$t1,$v0		# syscall results returned in $v0
+
+	# Math!
+	mul	$t0, $t0, $t0	# Altura = Altura²
+	div	$t1, $t1, $t0	# t0 = peso / altura
+
+	# Print string msg3
+	li	$v0, 4
+	la	$a0, msg3
+	syscall
+
+	# Print sum
+	li	$v0,1		# print_int syscall code = 1
+	move	$a0, $t0	# int to print must be loaded into $a0
+	syscall
+
+	# Print \n
+	li	$v0,4		# print_string syscall code = 4
+	la	$a0, newline
+	syscall
+
+	li	$v0,10		# exit
+	syscall
+
+	# Start .data segment (data!)
+	.data
+msg1:	.asciiz	"Entrada Altura:   "
+msg2:	.asciiz	"Entrada Peso:   "
+msg3:	.asciiz	"IMC = "
+newline:   .asciiz	"\n"
